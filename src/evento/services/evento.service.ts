@@ -12,13 +12,20 @@ export class EventoService {
   ) {}
 
   async findAll(): Promise<Evento[]> {
-    return await this.eventoRepository.find();
+    return await this.eventoRepository.find({
+      relations: {
+        usuario: true,
+      },
+    });
   }
 
   async findById(id: number): Promise<Evento> {
     const evento = await this.eventoRepository.findOne({
       where: {
         id,
+      },
+      relations: {
+        usuario: true,
       },
     });
 
@@ -32,6 +39,9 @@ export class EventoService {
     return await this.eventoRepository.find({
       where: {
         nome: ILike(`%${nome}%`),
+      },
+      relations: {
+        usuario: true,
       },
     });
   }
