@@ -29,6 +29,12 @@ export class UsuarioController {
     return this.usuarioService.findById(id);
   }
 
+  @Get('/:id/eventos')
+  @HttpCode(HttpStatus.OK)
+  listarEventos(@Param('id', ParseIntPipe) id: number) {
+    return this.usuarioService.listarEvento(id);
+  }
+
   @Get('/nome/:nome')
   @HttpCode(HttpStatus.OK)
   findAllByNome(@Param('nome') nome: string): Promise<Usuario[]> {

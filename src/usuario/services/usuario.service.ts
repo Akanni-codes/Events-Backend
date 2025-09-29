@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Usuario } from '../entities/usuario.entity';
 import { DeleteResult, ILike, Repository } from 'typeorm';
 import { EventoService } from '../../evento/services/evento.service';
+import { Evento } from '../../evento/entities/evento.entity';
 
 @Injectable()
 export class UsuarioService {
@@ -60,11 +61,20 @@ export class UsuarioService {
     const evento = await this.evetoService.findById(eventoId);
 
     if (!usuario.eventos) {
-      usuario.eventos = [];
+      throw new HttpException('Agenda não encontrada', HttpStatus.NO_CONTENT);
     }
 
     usuario.eventos.push(evento);
 
     return await this.usuarioRepository.save(usuario);
+  }
+
+  async listarEvento(id: number): Promise<Evento[]> {
+    const usuario = await this.findById(id);
+
+    if (!usuario.eventos) {
+      throw new HttpException('Agenda não encontrada', HttpStatus.NO_CONTENT);
+    }
+    return usuario.eventos;
   }
 }
