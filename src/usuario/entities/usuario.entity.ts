@@ -1,6 +1,13 @@
 import { IsNotEmpty } from 'class-validator';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
 import { Evento } from '../../evento/entities/evento.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'tb_usuarios' })
 export class Usuario {
@@ -19,6 +26,7 @@ export class Usuario {
   @Column({ length: 15, nullable: false })
   telefone: string;
 
-  @OneToMany(() => Evento, (evento) => evento.usuario)
-  evento: Evento;
+  @ManyToMany(() => Evento, (evento) => evento.usuarios, { eager: true })
+  @JoinTable() // cria tabela intermediária tb_usuarios_eventos
+  eventos: Evento[];
 }

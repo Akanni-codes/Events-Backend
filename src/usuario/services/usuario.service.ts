@@ -13,11 +13,7 @@ export class UsuarioService {
   ) {}
 
   async findAll(): Promise<Usuario[]> {
-    return await this.usuarioRepository.find({
-      relations: {
-        evento: true,
-      },
-    });
+    return await this.usuarioRepository.find();
   }
 
   async findById(id: number): Promise<Usuario> {
@@ -26,7 +22,7 @@ export class UsuarioService {
         id,
       },
       relations: {
-        evento: true,
+        eventos: true,
       },
     });
     if (!usuario) {
@@ -39,9 +35,6 @@ export class UsuarioService {
     return await this.usuarioRepository.find({
       where: {
         nome: ILike(`%${nome}%`),
-      },
-      relations: {
-        evento: true,
       },
     });
   }
@@ -62,8 +55,16 @@ export class UsuarioService {
     return await this.usuarioRepository.delete(id);
   }
 
-  async participar(usuario: Usuario): Promise<Usuario> {
-    await this.evetoService.findById(usuario.evento.id);
+  async participar(usuarioId: number, eventoId: number): Promise<Usuario> {
+    const usuario = await this.findById(usuarioId);
+    const evento = await this.evetoService.findById(eventoId);
+
+    if (!usuario.eventos) {
+      usuario.eventos = [];
+    }
+
+    usuario.eventos.push(evento);
+
     return await this.usuarioRepository.save(usuario);
   }
 }

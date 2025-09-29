@@ -2,7 +2,7 @@ import { IsNotEmpty } from 'class-validator';
 import {
   Column,
   Entity,
-  ManyToOne,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -27,6 +27,6 @@ export class Evento {
   @Column({ length: 5000, nullable: false })
   descricao: string;
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.evento)
-  usuario: Usuario;
+  @ManyToMany(() => Usuario, (usuario) => usuario.eventos)
+  usuarios: Usuario[];
 }

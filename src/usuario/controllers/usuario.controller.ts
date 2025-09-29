@@ -47,10 +47,13 @@ export class UsuarioController {
     return this.usuarioService.update(usario);
   }
 
-  @Put('/participar')
+  @Put('/:usuarioId/participar/:eventoId')
   @HttpCode(HttpStatus.OK)
-  participar(@Body() usuario: Usuario): Promise<Usuario> {
-    return this.usuarioService.participar(usuario);
+  participar(
+    @Param('usuarioId', ParseIntPipe) usuarioId: number,
+    @Param('eventoId', ParseIntPipe) eventoId: number,
+  ): Promise<Usuario> {
+    return this.usuarioService.participar(usuarioId, eventoId);
   }
 
   @Delete('/:id')
